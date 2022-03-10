@@ -7,25 +7,13 @@ import { commerce } from '../../lib/commerce'
 
 
 
-const AddressForm = ({ checkoutToken }) => {
+const AddressForm = ({ checkoutToken, next }) => {
   const [shippingCountries, setShippingCountries] = useState([])
   const [shippingCountry, setShippingCountry] = useState('')
   const [shippingSubdivisions, setShippingSubdivisions] = useState([])
   const [shippingSubdivision, setShippingSubdivision] = useState('')
   const [shippingOptions, setShippingOptions] = useState([])
   const [shippingOption, setShippingOption] = useState('')
-
-  // const subdivisionnn = Object.entries(shippingSubdivisions)
-  // .map(([code, name]) => ({ id: code, label: name }))
-    // .map((subdivision) => {
-    //   return (
-    //     <MenuItem key={subdivision.id} value={subdivision.id}>
-    //       {subdivision.label}
-    //     </MenuItem>
-    //   )
-    // })
-
-    // console.log('SUB API: ', subdivisionnn)
 
   const methods = useForm()
 
@@ -74,8 +62,8 @@ const AddressForm = ({ checkoutToken }) => {
         Shipping Address
       </Typography>
       <FormProvider {...methods}>
-        {/* {console.log(methods)} */}
-        <form>
+        {/* {console.log(methods)} */} 
+        <form onSubmit={methods.handleSubmit((data) => next({...data, shippingCountry, shippingSubdivision, shippingOption}))}>
           <Grid container spacing={3}>
             <CustomTextField name='firstName' label='First Name: ' />
             <CustomTextField name='lastName' label='Last Name: ' />
@@ -144,8 +132,16 @@ const AddressForm = ({ checkoutToken }) => {
           </Grid>
           <br />
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Button component={Link} variant="outlined" to="/tumiza_project/cart">Back to Cart</Button>
-            <Button type="submit" variant="contained" color="primary">Next</Button>
+            <Button
+              component={Link}
+              variant='outlined'
+              to='/tumiza_project/cart'
+            >
+              Back to Cart
+            </Button>
+            <Button type='submit' variant='contained' color='primary'>
+              Next
+            </Button>
           </div>
         </form>
       </FormProvider>
