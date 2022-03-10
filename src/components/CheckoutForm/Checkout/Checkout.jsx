@@ -42,6 +42,7 @@ const Checkout = ({ cart }) => {
 
   const next = (data) => {
     setShippingData(data)
+    nextStep()
   }
 
   const Form = () => {
