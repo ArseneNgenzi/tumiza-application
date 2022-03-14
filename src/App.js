@@ -8,7 +8,7 @@ const App = () => {
   const [cart, setCart] = useState({})
   const [order, setOrder] = useState({})
   const [errorMessage, setErrorMessage] = useState('')
-
+ 
   const fetchProducts = async () => {
     const { data } = await commerce.products.list()
 
@@ -48,6 +48,7 @@ const App = () => {
   const handleCaptureCheckout = async (checkoutTokenId, newOrder) => {
     try {
       const incomingOrder = await commerce.checkout.capture(checkoutTokenId, newOrder)
+      console.log(incomingOrder)
 
       setOrder(incomingOrder)
 

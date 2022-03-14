@@ -7,9 +7,13 @@ import Review from './Review'
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY)
 
 const PaymentForm = ({ checkoutToken, backStep, onCaptureCheckout, shippingData, nextStep }) => {
+
   const handleSubmit = async (event, elements, stripe) => {
     event.preventDefault()
-    if (!stripe || !elements) return
+
+    if (!stripe || !elements) { 
+      return
+    }
 
     const cardElement = elements.getElement(CardElement)
 
@@ -19,25 +23,41 @@ const PaymentForm = ({ checkoutToken, backStep, onCaptureCheckout, shippingData,
     })
 
     if (error) {
-      console.log(error)
+      console.log('[ERROR] => ', error)
     } else {
       const orderData = {
-        line_items: checkoutToken.live.line_items,
+        // line_items: checkoutToken.live.line_items,
+        line_items: {
+          item_7RyWOwmK5nEa2V: {
+            quantity: 1,
+            // variants: {
+            //   vgrp_p6dP5g0M4ln7kA: 'optn_DeN1ql93doz3ym',
+            // },
+          },
+        },
         customer: {
-          firstname: shippingData.firstname,
-          lastname: shippingData.lastname,
+          firstname: shippingData.firstName,
+          lastname: shippingData.lastName,
           email: shippingData.email,
         },
         shipping: {
-          name: 'Primary',
+          name: 'International',
           street: shippingData.address1,
           town_city: shippingData.city,
           county_state: shippingData.shippingSubdivision,
           postal_zip_code: shippingData.zip,
           country: shippingData.shippingCountry,
         },
-        fullfillment: {
+        fulfillment: {
           shipping_method: shippingData.shippingOption,
+        },
+        billing: {
+          name: 'John Doe',
+          street: '234 Fake St',
+          town_city: 'San Francisco',
+          county_state: 'US-CA',
+          postal_zip_code: '94103',
+          country: 'US',
         },
         payment: {
           gateway: 'stripe',
@@ -48,7 +68,9 @@ const PaymentForm = ({ checkoutToken, backStep, onCaptureCheckout, shippingData,
       }
 
       onCaptureCheckout(checkoutToken.id, orderData)
+
       nextStep()
+      console.log(orderData)
     }
   }
 
@@ -74,7 +96,7 @@ const PaymentForm = ({ checkoutToken, backStep, onCaptureCheckout, shippingData,
                   type='submit'
                   variant='contained'
                   disabled={!stripe}
-                  color=''
+                  color='primary'
                 >
                   Pay {checkoutToken.live.subtotal.formatted_with_code}
                 </Button>

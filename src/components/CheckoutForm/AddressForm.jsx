@@ -7,7 +7,7 @@ import { commerce } from '../../lib/commerce'
 
 
 
-const AddressForm = ({ checkoutToken, next }) => {
+const AddressForm = ({ checkoutToken, next, nextStep }) => {
   const [shippingCountries, setShippingCountries] = useState([])
   const [shippingCountry, setShippingCountry] = useState('')
   const [shippingSubdivisions, setShippingSubdivisions] = useState([])
@@ -62,7 +62,7 @@ const AddressForm = ({ checkoutToken, next }) => {
         Shipping Address
       </Typography>
       <FormProvider {...methods}>
-        {/* {console.log(methods)} */} 
+
         <form onSubmit={methods.handleSubmit((data) => next({...data, shippingCountry, shippingSubdivision, shippingOption}))}>
           <Grid container spacing={3}>
             <CustomTextField name='firstName' label='First Name: ' />
