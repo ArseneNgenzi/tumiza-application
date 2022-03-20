@@ -30,9 +30,7 @@ const PaymentForm = ({ checkoutToken, backStep, onCaptureCheckout, shippingData,
         line_items: {
           item_7RyWOwmK5nEa2V: {
             quantity: 1,
-            // variants: {
-            //   vgrp_p6dP5g0M4ln7kA: 'optn_DeN1ql93doz3ym',
-            // },
+            variant_id: 'vrnt_bO6J5apWnVoEjp',
           },
         },
         customer: {
