@@ -6,7 +6,7 @@ import Review from './Review'
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY)
 
-const PaymentForm = ({ checkoutToken, backStep, onCaptureCheckout, shippingData, nextStep }) => {
+const PaymentForm = ({ checkoutToken, backStep, onCaptureCheckout, shippingData, nextStep, timeout }) => {
 
   const handleSubmit = async (event, elements, stripe) => {
     event.preventDefault()
@@ -26,36 +26,25 @@ const PaymentForm = ({ checkoutToken, backStep, onCaptureCheckout, shippingData,
       console.log('[ERROR] => ', error)
     } else {
       const orderData = {
-        // line_items: checkoutToken.live.line_items,
-        line_items: {
-          item_7RyWOwmK5nEa2V: {
-            quantity: 1,
-            variant_id: 'vrnt_bO6J5apWnVoEjp',
-          },
-        },
+        line_items: checkoutToken.live.line_items,
+        // line_items: {
+        //   item_7RyWOwmK5nEa2V: {
+        //     quantity: 1,
+        //     variant_id: 'vrnt_bO6J5apWnVoEjp',
+        //   },
+        // },
         customer: {
           firstname: shippingData.firstName,
           lastname: shippingData.lastName,
           email: shippingData.email,
         },
         shipping: {
-          name: 'International',
+          name: 'primary',
           street: shippingData.address1,
           town_city: shippingData.city,
           county_state: shippingData.shippingSubdivision,
           postal_zip_code: shippingData.zip,
           country: shippingData.shippingCountry,
-        },
-        fulfillment: {
-          shipping_method: shippingData.shippingOption,
-        },
-        billing: {
-          name: 'John Doe',
-          street: '234 Fake St',
-          town_city: 'San Francisco',
-          county_state: 'US-CA',
-          postal_zip_code: '94103',
-          country: 'US',
         },
         payment: {
           gateway: 'stripe',
@@ -63,14 +52,27 @@ const PaymentForm = ({ checkoutToken, backStep, onCaptureCheckout, shippingData,
             payment_method_id: paymentMethod.id,
           },
         },
+        fulfillment: {
+          shipping_method: shippingData.shippingOption,
+        },
+        // billing: {
+        //   name: 'John Doe',
+        //   street: '234 Fake St',
+        //   town_city: 'San Francisco',
+        //   county_state: 'US-CA',
+        //   postal_zip_code: '94103',
+        //   country: 'US',
+        // },
       }
 
       onCaptureCheckout(checkoutToken.id, orderData)
 
+      timeout();
+
       nextStep()
-      console.log(orderData)
+      console.log("ORDER_DATA: ",orderData)
     }
-  }
+  } 
 
   return (
     <>

@@ -55,6 +55,7 @@ const App = () => {
       refreshCart()
     } catch (error) {
       setErrorMessage(error.data.error.message)
+      refreshCart() //DID THIS TO REFRESH THE WHEN ERROR OCCUR... Kulengeza tu
     }
   }
 
